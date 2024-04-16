@@ -1,0 +1,46 @@
+{
+    "executableId": "co.casterlabs.caffeinated",
+    "toCreate": [
+        {
+            "architectures": [
+                "x86_64"
+            ],
+            "operatingSystems": [
+                "linux_glibc",
+                "linux_musl",
+                "windows"
+            ],
+            "extraInclude": {},
+            "extraVmArgs": null
+        },
+        {
+            "architectures": [
+                "aarch64"
+            ],
+            "operatingSystems": [
+                "linux_glibc",
+                "linux_musl"
+            ],
+            "extraInclude": {},
+            "extraVmArgs": null
+        },
+        {
+            "architectures": [
+                "x86_64",
+                "aarch64"
+            ],
+            "operatingSystems": [
+                "macosx"
+            ],
+            "extraInclude": {},
+            "extraVmArgs": "-XstartOnFirstThread"
+        }
+    ],
+    "javaVersion": 21,
+    "mainInclude": {
+        "../core/target/core.jar": "casterlabs-caffeinated.jar"
+    },
+    "appIconPath": "icon.png",
+    "executableName": "Casterlabs-Caffeinated",
+    "vmArgs": "-Xms1M -jar casterlabs-caffeinated.jar"
+}
