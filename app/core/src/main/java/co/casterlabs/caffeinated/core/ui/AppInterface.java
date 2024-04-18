@@ -32,6 +32,10 @@ public class AppInterface {
         });
     }
 
+    static void onUIClose() {
+        System.exit(0); // TODO Temporary.
+    }
+
     public static void setDarkAppearance(boolean shouldBeDark) {
         useDarkAppearance = shouldBeDark;
         if (webview != null) {

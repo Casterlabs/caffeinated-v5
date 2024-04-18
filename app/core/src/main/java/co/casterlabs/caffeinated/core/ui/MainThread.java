@@ -33,10 +33,17 @@ public class MainThread implements ExecutionQueue {
                 Runnable popped = this.taskQueue.pop();
 
                 if (popped instanceof Webview) {
-                    this.currentWebview = (Webview) popped;
-                    this.taskQueue.forEach(this.currentWebview::dispatch); // Submit everything to the webview.
-                    this.taskQueue.clear(); // Clear the backlog, since we'll no longer have access to this thread.
-                    popped.run();
+                    try {
+                        this.currentWebview = (Webview) popped;
+                        this.taskQueue.forEach(this.currentWebview::dispatch); // Submit everything to the webview.
+                        this.taskQueue.clear(); // Clear the backlog, since we'll no longer have access to this thread.
+                        this.currentWebview.run();
+                    } finally {
+                        this.currentWebview.close();
+                        this.currentWebview = null;
+                        AppInterface.onUIClose();
+                    }
+                    break;
                 } else {
                     try {
                         popped.run();
@@ -60,12 +67,14 @@ public class MainThread implements ExecutionQueue {
 
     @Override
     public void execute(Runnable task) {
-        if (currentWebview != null && task instanceof Webview) {
-            throw new IllegalStateException("You cannot run more than one webview.");
+        if (task instanceof Webview) {
+            if (currentWebview != null) {
+                throw new IllegalStateException("You cannot run more than one webview.");
+            }
+            this.taskQueue.push(task);
+        } else {
+            ExecutionQueue.super.execute(task);
         }
-
-        // TODO Auto-generated method stub
-        ExecutionQueue.super.execute(task);
     }
 
     @Override
