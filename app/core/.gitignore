@@ -1,4 +1,5 @@
 /target/
+/src/main/resources/co/casterlabs/caffeinated/core/ui/html
 libwebview.so
 libwebview.dylib
 webview.dll

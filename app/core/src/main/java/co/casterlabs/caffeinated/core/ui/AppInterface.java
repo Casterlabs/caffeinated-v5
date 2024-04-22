@@ -38,8 +38,19 @@ public class AppInterface {
                 webview.setHTML(AppInterface.generateErrorHtml("App failed to initialize:", App.appFailReason));
             } else {
                 try {
-                    server.start();
-                    webview.loadURL(server.getLocalAddress());
+                    // Check for the development UI server.
+                    if (System.getProperty("caffeinated.ui_override") == null) {
+                        server.start();
+                        webview.loadURL(server.getLocalAddress());
+                    } else {
+                        webview.loadURL(System.getProperty("caffeinated.ui_override"));
+                    }
+
+                    webview.bind("internalSetDarkAppearance", (args) -> {
+                        useDarkAppearance = args.contains("true");
+                        webview.setDarkAppearance(useDarkAppearance);
+                        return null;
+                    });
 
                     bridge.defineObject("App", App.INSTANCE);
                     webview.setSize(App.INSTANCE.preferences.ui.width, App.INSTANCE.preferences.ui.height);
@@ -64,13 +75,6 @@ public class AppInterface {
         } catch (IOException ignored) {}
 
         System.exit(0); // TODO Temporary.
-    }
-
-    public static void setDarkAppearance(boolean shouldBeDark) {
-        useDarkAppearance = shouldBeDark;
-        if (webview != null) {
-            webview.setDarkAppearance(shouldBeDark);
-        }
     }
 
     public static void setTitle(String title) {
