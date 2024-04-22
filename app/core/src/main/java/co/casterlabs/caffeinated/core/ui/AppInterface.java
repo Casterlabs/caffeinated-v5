@@ -2,6 +2,7 @@ package co.casterlabs.caffeinated.core.ui;
 
 import java.io.IOException;
 
+import co.casterlabs.caffeinated.core.App;
 import dev.webview.webview_java.Webview;
 import dev.webview.webview_java.bridge.WebviewBridge;
 import dev.webview.webview_java.uiserver.UIServer;
@@ -31,25 +32,27 @@ public class AppInterface {
             server = new UIServer();
             server.setHandler(AppSchemeHandler.INSTANCE);
 
-            // TODO bridge tings
-            // TODO sizes.
+            if (App.INSTANCE == null) {
+                // We are so borked at this point that we won't even attempt to setup the
+                // bridge.
+                webview.setHTML(AppInterface.generateErrorHtml("App failed to initialize:", App.appFailReason));
+            } else {
+                try {
+                    server.start();
+                    webview.loadURL(server.getLocalAddress());
+
+                    bridge.defineObject("App", App.INSTANCE);
+                    // TODO sizes.
+                } catch (IOException e) {
+                    LOGGER.fatal("Unable to start UI server: %s", e);
+                    webview.setHTML(
+                        AppInterface.generateErrorHtml("Unable to start the UI server! Please report this to the Casterlabs developers:", e)
+                    );
+                }
+            }
 
             webview.setDarkAppearance(useDarkAppearance);
             webview.setTitle("Casterlabs-Caffeinated");
-
-            try {
-                server.start();
-                webview.loadURL(server.getLocalAddress());
-            } catch (IOException e) {
-                LOGGER.fatal("Unable to start UI server: %s", e);
-                webview.setHTML(
-                    "<!DOCTYPE html>"
-                        + "<html style='background-color: #111113; color: #EEEEF0; font-family: system-ui;'>"
-                        + "<h1 style='font-size: 1.25rem;'>Unable to start the UI server! Please report this to the Casterlabs developers:</h1>"
-                        + "<pre>" + LogUtil.getExceptionStack(e) + "</pre>"
-                        + "</html>"
-                );
-            }
 
             MainThread.getInstance().execute(webview); // Take over.
         });
@@ -74,6 +77,14 @@ public class AppInterface {
         if (webview != null) {
             webview.setTitle(title);
         }
+    }
+
+    public static String generateErrorHtml(String title, Throwable reason) {
+        return "<!DOCTYPE html>"
+            + "<html style='background-color: #111113; color: #EEEEF0; font-family: system-ui;'>"
+            + "<h1 style='font-size: 1.25rem;'>" + title + "</h1>"
+            + "<pre>" + LogUtil.getExceptionStack(reason) + "</pre>"
+            + "</html>";
     }
 
 }

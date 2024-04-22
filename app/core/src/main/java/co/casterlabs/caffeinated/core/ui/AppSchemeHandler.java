@@ -11,7 +11,6 @@ import co.casterlabs.rhs.server.HttpResponse;
 import co.casterlabs.rhs.session.HttpSession;
 import co.casterlabs.rhs.util.MimeTypes;
 import lombok.SneakyThrows;
-import xyz.e3ndr.fastloggingframework.LogUtil;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class AppSchemeHandler implements Function<HttpSession, HttpResponse> {
@@ -64,11 +63,7 @@ public class AppSchemeHandler implements Function<HttpSession, HttpResponse> {
 
             return HttpResponse.newFixedLengthResponse(
                 StandardHttpStatus.INTERNAL_ERROR,
-                "<!DOCTYPE html>"
-                    + "<html style='background-color: #111113; color: #EEEEF0; font-family: system-ui;'>"
-                    + "<h1 style='font-size: 1.25rem;'>500 Internal Error</h1>"
-                    + "<pre>" + LogUtil.getExceptionStack(t) + "</pre>"
-                    + "</html>"
+                AppInterface.generateErrorHtml("500 Internal Error", t)
             )
                 .setMimeType("text/html");
         }

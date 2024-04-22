@@ -1,14 +1,19 @@
 package co.casterlabs.caffeinated.core.ui;
 
+import co.casterlabs.caffeinated.core.App;
+
 public class Launcher {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Capturing main thread...");
+        App.LOGGER.info("Loading the app...");
+        App.class.toString(); // LOAD.
+
+        App.LOGGER.info("Capturing main thread...");
         new MainThread(Launcher::startupLogic); // Capture the main thread.
     }
 
     static void startupLogic() {
-        System.out.println("Opening window...");
+        App.LOGGER.info("Opening window...");
         AppInterface.openWindow();
     }
 
