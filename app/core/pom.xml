@@ -34,7 +34,7 @@
 				<executions>
 					<execution>
 						<id>auto-clean</id>
-						<phase>process-sources</phase>
+						<phase>generate-sources</phase>
 						<goals>
 							<goal>clean</goal>
 						</goals>
@@ -63,14 +63,14 @@
 						<goals>
 							<goal>install-node-and-npm</goal>
 						</goals>
-						<phase>generate-resources</phase>
+						<phase>generate-sources</phase>
 					</execution>
 					<execution>
 						<id>npm install</id>
 						<goals>
 							<goal>npm</goal>
 						</goals>
-						<phase>generate-resources</phase>
+						<phase>generate-sources</phase>
 						<configuration>
 							<arguments>install</arguments>
 						</configuration>
@@ -80,7 +80,7 @@
 						<goals>
 							<goal>npm</goal>
 						</goals>
-						<phase>generate-resources</phase>
+						<phase>generate-sources</phase>
 						<configuration>
 							<arguments>run build</arguments>
 						</configuration>
