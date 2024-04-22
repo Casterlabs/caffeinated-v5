@@ -42,7 +42,7 @@ public class AppInterface {
                     webview.loadURL(server.getLocalAddress());
 
                     bridge.defineObject("App", App.INSTANCE);
-                    // TODO sizes.
+                    webview.setSize(App.INSTANCE.preferences.ui.width, App.INSTANCE.preferences.ui.height);
                 } catch (IOException e) {
                     LOGGER.fatal("Unable to start UI server: %s", e);
                     webview.setHTML(

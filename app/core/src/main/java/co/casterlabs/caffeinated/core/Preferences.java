@@ -22,6 +22,12 @@ public class Preferences extends JavascriptObject {
         @JavascriptValue(watchForMutate = true)
         public float zoom = 1;
 
+        @JavascriptValue
+        public int width = 800;
+
+        @JavascriptValue
+        public int height = 600;
+
     }
 
     /* ------------------------ */
