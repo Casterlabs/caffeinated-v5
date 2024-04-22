@@ -54,10 +54,10 @@ public class AppInterface {
 
                     bridge.defineObject("App", App.INSTANCE);
                     webview.setSize(App.INSTANCE.preferences.ui.width, App.INSTANCE.preferences.ui.height);
-                } catch (IOException e) {
-                    LOGGER.fatal("Unable to start UI server: %s", e);
+                } catch (Throwable t) {
+                    LOGGER.fatal("Unable to start UI server: %s", t);
                     webview.setHTML(
-                        AppInterface.generateErrorHtml("Unable to start the UI server! Please report this to the Casterlabs developers:", e)
+                        AppInterface.generateErrorHtml("Unable to start the UI server! Please report this to the Casterlabs developers:", t)
                     );
                 }
             }

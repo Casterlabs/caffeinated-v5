@@ -6,6 +6,7 @@ import java.util.function.Function;
 
 import org.jetbrains.annotations.Nullable;
 
+import co.casterlabs.caffeinated.core.App;
 import co.casterlabs.rhs.protocol.StandardHttpStatus;
 import co.casterlabs.rhs.server.HttpResponse;
 import co.casterlabs.rhs.session.HttpSession;
@@ -41,7 +42,7 @@ public class AppSchemeHandler implements Function<HttpSession, HttpResponse> {
             }
 
             byte[] contents;
-            try (InputStream in = AppSchemeHandler.class.getClassLoader().getResourceAsStream("/co/casterlabs/caffeinated/core/ui/html" + uri)) {
+            try (InputStream in = App.class.getResourceAsStream("/co/casterlabs/caffeinated/core/ui/html" + uri)) {
                 if (in == null) {
                     throw new FileNotFoundException("Could not find UI file: /co/casterlabs/caffeinated/core/ui/html" + uri);
                 }
