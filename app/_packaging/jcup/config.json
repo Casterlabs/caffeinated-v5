@@ -42,5 +42,5 @@
     },
     "appIconPath": "icon.png",
     "executableName": "Casterlabs-Caffeinated",
-    "vmArgs": "-Xms1M -jar casterlabs-caffeinated.jar"
+    "vmArgs": "-jar casterlabs-caffeinated.jar"
 }
