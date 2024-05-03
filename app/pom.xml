@@ -7,6 +7,8 @@
 
 	<modules>
 		<module>core</module>
+		<module>plugin-sdk</module>
+		<module>built-in-plugins</module>
 	</modules>
 
 	<properties>
