@@ -25,7 +25,7 @@
 							<excludeDefaultDirectories>true</excludeDefaultDirectories>
 							<filesets>
 								<fileset>
-									<directory>${project.basedir}/src/main/resources/co/casterlabs/caffeinated/core/ui/html</directory>
+									<directory>${project.basedir}/src/main/resources/co/casterlabs/caffeinated/builtin/html</directory>
 								</fileset>
 							</filesets>
 						</configuration>
@@ -38,7 +38,7 @@
 				<version>1.14.2</version>
 				<configuration>
 					<nodeVersion>v18.16.1</nodeVersion>
-					<workingDirectory>src/main/ui</workingDirectory>
+					<workingDirectory>src/main/widgets</workingDirectory>
 				</configuration>
 				<executions>
 					<execution>
