@@ -189,6 +189,21 @@
 			<scope>provided</scope>
 		</dependency> <!-- For Eclipse users -->
 
+		<!-- Utils -->
+		<dependency>
+			<groupId>co.casterlabs</groupId>
+			<artifactId>Rson</artifactId>
+			<version>1.18.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.e3ndr</groupId>
+			<artifactId>FastLoggingFramework</artifactId>
+			<version>1.12.1</version>
+			<scope>compile</scope>
+		</dependency>
+		
+		<!-- Webview -->
 		<dependency>
 			<groupId>com.github.webview.webview_java</groupId>
 			<artifactId>core</artifactId>
@@ -208,18 +223,5 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- Utils -->
-		<dependency>
-			<groupId>co.casterlabs</groupId>
-			<artifactId>Rson</artifactId>
-			<version>1.17.9</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.github.e3ndr</groupId>
-			<artifactId>FastLoggingFramework</artifactId>
-			<version>1.12.1</version>
-			<scope>compile</scope>
-		</dependency>
 	</dependencies>
 </project>
