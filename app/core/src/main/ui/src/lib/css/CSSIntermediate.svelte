@@ -15,7 +15,12 @@
 			.subscribe(async (themeId) => {
 				if (themeId == null) return;
 
-				const theme = (await window.App.themes).map[themeId];
+				let theme = (await window.App.themes).map[themeId];
+				if (!theme) {
+					// Fallback...
+					alert('Invalid theme ID! Falling back...');
+					theme = (await window.App.themes).map['co.casterlabs.nqp_dark'];
+				}
 
 				// @ts-ignore
 				// See AppInterface.java

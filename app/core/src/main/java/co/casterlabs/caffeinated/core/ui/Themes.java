@@ -32,14 +32,16 @@ public class Themes {
     @EqualsAndHashCode
     @JsonClass(exposeAll = true)
     public static class Theme {
-        public boolean isDark;
+        public final String name = null;
 
-        public String[] baseScale;
-        public String[] accentScale;
+        public final Boolean isDark = null;
+
+        public final String[] baseScale = null;
+        public final String[] accentScale = null;
 
         // Optional. Must be NULL if you don't want it.
-        public String[] baseScaleP3;
-        public String[] accentScaleP3;
+        public final String[] baseScaleP3 = null;
+        public final String[] accentScaleP3 = null;
 
         @JsonValidate
         private void $validate() {
