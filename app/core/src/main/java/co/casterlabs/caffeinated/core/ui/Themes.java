@@ -33,6 +33,7 @@ public class Themes {
     @JsonClass(exposeAll = true)
     public static class Theme {
         public final String name = null;
+        public final String wordmarkDataUri = null;
 
         public final Boolean isDark = null;
 

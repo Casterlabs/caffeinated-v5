@@ -1,10 +1,10 @@
 import type { Writable } from "svelte/store";
 
-declare type Stores = {
+export declare type Stores = {
 	readonly svelte(propertyName: string): Writable<null | any>
 }
 
-declare type Preferences  = {
+export declare type Preferences  = {
 	readonly __stores: Stores;
 
 	readonly ui: {
@@ -18,19 +18,23 @@ declare type Preferences  = {
 	readonly async save(): void
 };
 
-declare type Themes = {
+export declare type Theme = {
+	readonly name: string;
+	readonly wordmarkDataUri: string;
+	readonly isDark: boolean;
+	readonly baseScale: string[12];
+	readonly accentScale: string[12];
+	readonly baseScaleP3: null | string[12];
+	readonly accentScaleP3: null | string[12];
+};
+
+export declare type Themes = {
 	readonly map: {
-		[key: string]: {
-			readonly isDark: boolean;
-			readonly baseScale: string[12];
-			readonly accentScale: string[12];
-			readonly baseScaleP3: null | string[12];
-			readonly accentScaleP3: null | string[12];
-		};
+		[key: string]: Theme;
 	};
 };
 
-declare type App = {
+export declare type App = {
 	readonly __stores: Stores;
 
 	readonly preferences: Preferences;

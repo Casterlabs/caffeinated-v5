@@ -3,46 +3,32 @@
 
 	import iconsHook from '$lib/icons';
 	import { onMount } from 'svelte';
+	import { currentTheme } from '$lib/app';
 
 	let isDarkTheme = true;
 	let intermediate: HTMLElement;
 
 	onMount(iconsHook);
 
-	onMount(async () => {
-		window.App.preferences.ui.__stores //
-			.svelte('theme')
-			.subscribe(async (themeId) => {
-				if (themeId == null) return;
+	currentTheme.subscribe((theme) => {
+		if (!theme) return;
 
-				let theme = (await window.App.themes).map[themeId];
-				if (!theme) {
-					// Fallback...
-					alert('Invalid theme ID! Falling back...');
-					theme = (await window.App.themes).map['co.casterlabs.nqp_dark'];
-				}
-
-				// @ts-ignore
-				// See AppInterface.java
-				window.internalSetDarkAppearance(theme.isDark);
-
-				for (const [idx, c] of Object.entries(theme.baseScale)) {
-					intermediate.style.setProperty(`--baseSDR-${parseInt(idx) + 1}`, c);
-				}
-				for (const [idx, c] of Object.entries(theme.accentScale)) {
-					intermediate.style.setProperty(`--accentSDR-${parseInt(idx) + 1}`, c);
-				}
-				if (theme.baseScaleP3) {
-					for (const [idx, c] of Object.entries(theme.baseScaleP3)) {
-						intermediate.style.setProperty(`--baseP3-${parseInt(idx) + 1}`, c);
-					}
-				}
-				if (theme.accentScaleP3) {
-					for (const [idx, c] of Object.entries(theme.accentScaleP3)) {
-						intermediate.style.setProperty(`--accentP3-${parseInt(idx) + 1}`, c);
-					}
-				}
-			});
+		for (const [idx, c] of Object.entries(theme.baseScale)) {
+			intermediate.style.setProperty(`--baseSDR-${parseInt(idx) + 1}`, c);
+		}
+		for (const [idx, c] of Object.entries(theme.accentScale)) {
+			intermediate.style.setProperty(`--accentSDR-${parseInt(idx) + 1}`, c);
+		}
+		if (theme.baseScaleP3) {
+			for (const [idx, c] of Object.entries(theme.baseScaleP3)) {
+				intermediate.style.setProperty(`--baseP3-${parseInt(idx) + 1}`, c);
+			}
+		}
+		if (theme.accentScaleP3) {
+			for (const [idx, c] of Object.entries(theme.accentScaleP3)) {
+				intermediate.style.setProperty(`--accentP3-${parseInt(idx) + 1}`, c);
+			}
+		}
 	});
 </script>
 
