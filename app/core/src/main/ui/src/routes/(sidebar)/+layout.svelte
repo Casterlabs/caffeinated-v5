@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { ANIMATE_DELAY, ANIMATE_DURATION, currentTheme } from '$lib/app';
+	import type { Writable } from 'svelte/store';
 	import { fade } from 'svelte/transition';
+	import type { KoiAccount } from '../../app.js';
+
+	const accounts: Writable<KoiAccount[]> = window.App.koi.__stores.svelte('accounts');
 
 	export let data;
 
@@ -50,20 +54,33 @@
 		</ul>
 
 		{#if true}
+			{@const accounts = Object.values($accounts || {}).filter((a) => a.isAlive)}
 			{@const isCurrentPage = $page.url.pathname.startsWith('/settings')}
-			<a href="/settings" class="rounded-lg h-12 overflow-hidden text-sm font-semibold leading-6 text-white hover:bg-base-3 transition-colors" class:bg-base-4={isCurrentPage}>
-				<span class="sr-only"> Open Settings </span>
-				<div class="hover:-translate-y-1/2 py-2 space-y-4 transition-transform">
-					<div aria-hidden="true" class="mx-2 flex items-center gap-x-3">
-						<img class="h-8 w-8 rounded-full bg-[black]" src="https://randomuser.me/api/portraits/men/41.jpg" alt="" />
-						<span> JohnSmithTTV </span>
+			{#if accounts.length == 0}
+				<a href="/settings" class="rounded-lg h-12 overflow-hidden text-sm font-semibold leading-6 text-white hover:bg-base-3 transition-colors" class:bg-base-4={isCurrentPage}>
+					<span class="sr-only"> Open Settings </span>
+					<div class="py-2 space-y-4 transition-transform">
+						<div aria-hidden="true" class="w-fit mx-2 flex items-center gap-x-3">
+							<icon class="w-8 h-8" data-icon="outline/cog" />
+							<span> Settings </span>
+						</div>
 					</div>
-					<div aria-hidden="true" class="mx-2 flex items-center gap-x-3">
-						<icon class="w-8 h-8" data-icon="outline/cog" />
-						<span> Settings </span>
+				</a>
+			{:else}
+				<a href="/settings" class="rounded-lg h-12 overflow-hidden text-sm font-semibold leading-6 text-white hover:bg-base-3 transition-colors" class:bg-base-4={isCurrentPage}>
+					<span class="sr-only"> Open Settings </span>
+					<div class="hover:-translate-y-1/2 py-2 space-y-4 transition-transform">
+						<div aria-hidden="true" class="w-fit mx-2 flex items-center gap-x-3">
+							<img class="h-8 w-8 rounded-full bg-[black]" src={accounts[0].profile.image_link} alt="" />
+							<span> {accounts[0].profile.displayname} </span>
+						</div>
+						<div aria-hidden="true" class="w-fit mx-2 flex items-center gap-x-3">
+							<icon class="w-8 h-8" data-icon="outline/cog" />
+							<span> Settings </span>
+						</div>
 					</div>
-				</div>
-			</a>
+				</a>
+			{/if}
 		{/if}
 	</nav>
 
