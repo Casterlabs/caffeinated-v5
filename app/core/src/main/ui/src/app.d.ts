@@ -43,8 +43,8 @@ export declare type KoiAccount  = {
 export declare type Koi  = {
 	readonly __stores: Stores;
 
-	readonly accounts: {[key: string]: KoiAccount};	
-	readonly history: any[]; // TODO types for events...
+	readonly accounts: Promise<{[key: string]: KoiAccount}> | {[key: string]: KoiAccount};	
+	readonly history: Promise<any[]>  | any[]; // TODO types for events...
 };
 
 export declare type App = {
