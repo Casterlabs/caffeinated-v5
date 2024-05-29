@@ -6,6 +6,7 @@ import co.casterlabs.caffeinated.core.App;
 import dev.webview.webview_java.Webview;
 import dev.webview.webview_java.bridge.WebviewBridge;
 import dev.webview.webview_java.uiserver.UIServer;
+import lombok.Getter;
 import xyz.e3ndr.fastloggingframework.LogUtil;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
@@ -13,7 +14,7 @@ public class AppInterface {
     private static final FastLogger LOGGER = new FastLogger();
 
     private static Webview webview;
-    private static WebviewBridge bridge;
+    private static @Getter WebviewBridge bridge;
     private static UIServer server;
 
     private static boolean useDarkAppearance = true;

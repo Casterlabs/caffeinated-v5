@@ -34,10 +34,24 @@ export declare type Themes = {
 	};
 };
 
+export declare type KoiAccount  = {
+	readonly isAlive: boolean;
+	readonly token: String;
+	readonly profile: any; // TODO types for events...
+};
+
+export declare type Koi  = {
+	readonly __stores: Stores;
+
+	readonly accounts: {[key: string]: KoiAccount};	
+	readonly history: any[]; // TODO types for events...
+};
+
 export declare type App = {
 	readonly __stores: Stores;
 
 	readonly preferences: Preferences;
+	readonly koi: Koi;
 	readonly themes: Promise<Themes>;
 };
 

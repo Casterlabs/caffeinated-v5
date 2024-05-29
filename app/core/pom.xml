@@ -42,7 +42,8 @@
 							<excludeDefaultDirectories>true</excludeDefaultDirectories>
 							<filesets>
 								<fileset>
-									<directory>${project.basedir}/src/main/resources/co/casterlabs/caffeinated/core/ui/html</directory>
+									<directory>
+										${project.basedir}/src/main/resources/co/casterlabs/caffeinated/core/ui/html</directory>
 								</fileset>
 							</filesets>
 						</configuration>
@@ -99,10 +100,12 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.basedir}/src/main/resources/co/casterlabs/caffeinated/core/ui/html</outputDirectory>
+							<outputDirectory>
+								${project.basedir}/src/main/resources/co/casterlabs/caffeinated/core/ui/html</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${project.basedir}/src/main/ui/build</directory>
+									<directory>
+										${project.basedir}/src/main/ui/build</directory>
 								</resource>
 							</resources>
 						</configuration>
@@ -145,7 +148,8 @@
 					<transformers>
 						<transformer
 							implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-							<mainClass>co.casterlabs.caffeinated.core.ui.Launcher</mainClass>
+							<mainClass>
+								co.casterlabs.caffeinated.core.ui.Launcher</mainClass>
 						</transformer>
 					</transformers>
 					<filters>
@@ -188,7 +192,27 @@
 			<version>1.12.1</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
+		<!-- Koi -->
+		<dependency>
+			<groupId>co.casterlabs</groupId>
+			<artifactId>koi-sdk</artifactId>
+			<version>267f695</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>co.casterlabs.EmojiApi</groupId>
+			<artifactId>Index</artifactId>
+			<version>3.5.2</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.unbescape</groupId>
+			<artifactId>unbescape</artifactId>
+			<version>1.1.6.RELEASE</version>
+			<scope>compile</scope>
+		</dependency>
+
 		<!-- Webview -->
 		<dependency>
 			<groupId>com.github.webview.webview_java</groupId>
