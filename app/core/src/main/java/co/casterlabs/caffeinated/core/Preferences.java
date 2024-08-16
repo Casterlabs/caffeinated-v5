@@ -6,19 +6,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
-import dev.webview.webview_java.bridge.JavascriptFunction;
-import dev.webview.webview_java.bridge.JavascriptObject;
-import dev.webview.webview_java.bridge.JavascriptValue;
+import co.casterlabs.saucer.bridge.JavascriptFunction;
+import co.casterlabs.saucer.bridge.JavascriptObject;
+import co.casterlabs.saucer.bridge.JavascriptValue;
 
-public class Preferences extends JavascriptObject {
+@JavascriptObject
+public class Preferences {
 
     /* ------------------------ */
     public UIPreferences ui = new UIPreferences();
 
+    @JavascriptObject
     @JsonClass(exposeAll = true)
-    public static class UIPreferences extends JavascriptObject {
+    public static class UIPreferences {
         @JavascriptValue(watchForMutate = true)
         public String theme = "co.casterlabs.nqp_dark";
 
@@ -49,10 +50,7 @@ public class Preferences extends JavascriptObject {
     }
 
     static Preferences load() throws IOException {
-        Preferences prefs = new Preferences();
-        prefs.ui = Rson.DEFAULT.fromJson("{}", UIPreferences.class);
-        prefs.tokens = Rson.DEFAULT.fromJson("{}", TokenPreferences.class);
-        return prefs;
+        return new Preferences(); // TODO file loading.
     }
 
 }

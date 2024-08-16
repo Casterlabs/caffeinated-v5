@@ -11,6 +11,10 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
+	<properties>
+		<saucer4j.version>f466d9e</saucer4j.version>
+	</properties>
+
 	<build>
 		<resources>
 			<resource>
@@ -192,12 +196,18 @@
 			<version>1.12.1</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>co.casterlabs.commons</groupId>
+			<artifactId>Async</artifactId>
+			<version>1.7.1</version>
+			<scope>compile</scope>
+		</dependency>
 
 		<!-- Koi -->
 		<dependency>
 			<groupId>co.casterlabs</groupId>
 			<artifactId>koi-sdk</artifactId>
-			<version>267f695</version>
+			<version>3d130ba</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -213,23 +223,17 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- Webview -->
+		<!-- Saucer -->
 		<dependency>
-			<groupId>com.github.webview.webview_java</groupId>
-			<artifactId>core</artifactId>
-			<version>da910b6</version>
+			<groupId>com.github.saucer.saucer4j</groupId>
+			<artifactId>webview2</artifactId>
+			<version>${saucer4j.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.github.webview.webview_java</groupId>
-			<artifactId>bridge</artifactId>
-			<version>da910b6</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.github.webview.webview_java</groupId>
-			<artifactId>ui-server</artifactId>
-			<version>da910b6</version>
+			<groupId>com.github.saucer.saucer4j</groupId>
+			<artifactId>gtk</artifactId>
+			<version>${saucer4j.version}</version>
 			<scope>compile</scope>
 		</dependency>
 

@@ -10,25 +10,27 @@
 
 	onMount(iconsHook);
 
-	currentTheme.subscribe((theme) => {
-		if (!theme) return;
+	onMount(() => {
+		return currentTheme.subscribe((theme) => {
+			if (!theme) return;
 
-		for (const [idx, c] of Object.entries(theme.baseScale)) {
-			intermediate.style.setProperty(`--baseSDR-${parseInt(idx) + 1}`, c);
-		}
-		for (const [idx, c] of Object.entries(theme.accentScale)) {
-			intermediate.style.setProperty(`--accentSDR-${parseInt(idx) + 1}`, c);
-		}
-		if (theme.baseScaleP3) {
-			for (const [idx, c] of Object.entries(theme.baseScaleP3)) {
-				intermediate.style.setProperty(`--baseP3-${parseInt(idx) + 1}`, c);
+			for (const [idx, c] of Object.entries(theme.baseScale)) {
+				intermediate.style.setProperty(`--baseSDR-${parseInt(idx) + 1}`, c);
 			}
-		}
-		if (theme.accentScaleP3) {
-			for (const [idx, c] of Object.entries(theme.accentScaleP3)) {
-				intermediate.style.setProperty(`--accentP3-${parseInt(idx) + 1}`, c);
+			for (const [idx, c] of Object.entries(theme.accentScale)) {
+				intermediate.style.setProperty(`--accentSDR-${parseInt(idx) + 1}`, c);
 			}
-		}
+			if (theme.baseScaleP3) {
+				for (const [idx, c] of Object.entries(theme.baseScaleP3)) {
+					intermediate.style.setProperty(`--baseP3-${parseInt(idx) + 1}`, c);
+				}
+			}
+			if (theme.accentScaleP3) {
+				for (const [idx, c] of Object.entries(theme.accentScaleP3)) {
+					intermediate.style.setProperty(`--accentP3-${parseInt(idx) + 1}`, c);
+				}
+			}
+		});
 	});
 </script>
 

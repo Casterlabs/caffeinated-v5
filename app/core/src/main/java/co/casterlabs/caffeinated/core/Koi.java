@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import co.casterlabs.caffeinated.core.ui.AppInterface;
 import co.casterlabs.caffeinated.core.util.ValueIdentityHashMap;
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.koi.api.KoiConnection;
@@ -18,14 +19,16 @@ import co.casterlabs.koi.api.listener.KoiLifeCycleHandler;
 import co.casterlabs.koi.api.types.KoiEvent;
 import co.casterlabs.koi.api.types.events.UserUpdateEvent;
 import co.casterlabs.koi.api.types.user.User;
+import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonExclude;
-import dev.webview.webview_java.bridge.JavascriptObject;
-import dev.webview.webview_java.bridge.JavascriptValue;
+import co.casterlabs.saucer.bridge.JavascriptObject;
+import co.casterlabs.saucer.bridge.JavascriptValue;
 import lombok.EqualsAndHashCode;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
-public class Koi extends JavascriptObject {
+@JavascriptObject
+public class Koi {
     private static final FastLogger LOGGER = new FastLogger();
     private static final long RECONNECT_DELAY = TimeUnit.SECONDS.toMillis(15);
 
@@ -49,6 +52,10 @@ public class Koi extends JavascriptObject {
 //            App.INSTANCE.preferences.tokens.koi.forEach(this::connect);
 //        }
         this.connect(System.getProperty("caffeinated.test.token"));
+
+        this.eventListeners.add((e) -> {
+            AppInterface.emit("koi-event", Rson.DEFAULT.toJson(e));
+        });
     }
 
     public void handleEvent(KoiEvent e, boolean triggerPreprocessors) {

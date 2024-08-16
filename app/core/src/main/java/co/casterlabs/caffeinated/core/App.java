@@ -2,14 +2,13 @@ package co.casterlabs.caffeinated.core;
 
 import java.io.IOException;
 
-import co.casterlabs.caffeinated.core.ui.AppInterface;
 import co.casterlabs.caffeinated.core.ui.Themes;
-import co.casterlabs.rakurai.json.Rson;
-import dev.webview.webview_java.bridge.JavascriptObject;
-import dev.webview.webview_java.bridge.JavascriptValue;
+import co.casterlabs.saucer.bridge.JavascriptObject;
+import co.casterlabs.saucer.bridge.JavascriptValue;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
-public class App extends JavascriptObject {
+@JavascriptObject
+public class App {
     public static final FastLogger LOGGER = new FastLogger();
     public static final App INSTANCE;
     public static final Throwable appFailReason;
@@ -40,11 +39,6 @@ public class App extends JavascriptObject {
         this.preferences = Preferences.load();
         this.themes = new Themes();
         this.koi = new Koi();
-
-        // Gross and almost circular. I don't care.
-        this.koi.eventListeners.add((e) -> {
-            AppInterface.getBridge().emit("koi-event", Rson.DEFAULT.toJson(e));
-        });
     }
 
 }

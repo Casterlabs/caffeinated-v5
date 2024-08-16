@@ -4,18 +4,16 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.function.Supplier;
 
+import co.casterlabs.caffeinated.core.ui.AppInterface.DummySaucerRunnable;
 import co.casterlabs.commons.async.queue.ExecutionQueue;
-import dev.webview.webview_java.Webview;
+import co.casterlabs.saucer.Saucer;
 import lombok.Getter;
 
-@SuppressWarnings({
-        "deprecation",
-        "unchecked"
-})
+@SuppressWarnings("unchecked")
 public class MainThread implements ExecutionQueue {
     private static @Getter MainThread instance;
 
-    private Webview currentWebview;
+    private Saucer currentWebview;
 
     public final Thread thread;
     private final Object logicLock = new Object();
@@ -32,12 +30,13 @@ public class MainThread implements ExecutionQueue {
             while (!this.taskQueue.isEmpty()) {
                 Runnable popped = this.taskQueue.pop();
 
-                if (popped instanceof Webview) {
+                if (popped instanceof DummySaucerRunnable) {
                     try {
-                        this.currentWebview = (Webview) popped;
-                        this.taskQueue.forEach(this.currentWebview::dispatch); // Submit everything to the webview.
+                        this.currentWebview = ((DummySaucerRunnable) popped).saucer;
+                        this.taskQueue.forEach(this.currentWebview.window()::dispatch); // Submit everything to the webview.
                         this.taskQueue.clear(); // Clear the backlog, since we'll no longer have access to this thread.
-                        this.currentWebview.run();
+
+                        Saucer.run();
                     } finally {
                         this.currentWebview.close();
                         this.currentWebview = null;
@@ -67,11 +66,11 @@ public class MainThread implements ExecutionQueue {
 
     @Override
     public void execute(Runnable task) {
-        if (task instanceof Webview) {
-            if (currentWebview != null) {
+        if (task instanceof DummySaucerRunnable) {
+            if (this.currentWebview != null) {
                 throw new IllegalStateException("You cannot run more than one webview.");
             }
-            this.taskQueue.push(task);
+            this.taskQueue.push(task); // avoid wrapping as a Supplier<Void>.
         } else {
             ExecutionQueue.super.execute(task);
         }
@@ -90,7 +89,7 @@ public class MainThread implements ExecutionQueue {
                 this.logicLock.notifyAll();
             }
         } else {
-            this.currentWebview.dispatch(() -> {
+            this.currentWebview.window().dispatch(() -> {
                 $t[0] = task.get();
             });
         }

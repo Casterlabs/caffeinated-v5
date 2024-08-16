@@ -2,8 +2,9 @@
 	import type { Writable } from 'svelte/store';
 	import type { KoiAccount } from '../app';
 	import { goto } from '$app/navigation';
+	import { svelte } from '$lib/app';
 
-	const accounts: Writable<KoiAccount[]> = window.App.koi.__stores.svelte('accounts');
+	const accounts: Writable<KoiAccount[]> = svelte('App.koi', 'accounts');
 	let manualBypass = false;
 
 	setTimeout(() => (manualBypass = true), 15 * 1000);

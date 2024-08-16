@@ -2,26 +2,25 @@ package co.casterlabs.caffeinated.core.ui;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.function.Function;
-
-import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.caffeinated.core.App;
-import co.casterlabs.rhs.protocol.StandardHttpStatus;
-import co.casterlabs.rhs.server.HttpResponse;
-import co.casterlabs.rhs.session.HttpSession;
-import co.casterlabs.rhs.util.MimeTypes;
+import co.casterlabs.saucer.scheme.MimeTypes;
+import co.casterlabs.saucer.scheme.SaucerSchemeHandler;
+import co.casterlabs.saucer.scheme.SaucerSchemeRequest;
+import co.casterlabs.saucer.scheme.SaucerSchemeResponse;
+import co.casterlabs.saucer.scheme.SaucerSchemeResponse.SaucerRequestError;
+import co.casterlabs.saucer.utils.SaucerStash;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
-public class AppSchemeHandler implements Function<HttpSession, HttpResponse> {
-    public static final Function<HttpSession, HttpResponse> INSTANCE = new AppSchemeHandler();
+public class AppSchemeHandler implements SaucerSchemeHandler {
+    public static final SaucerSchemeHandler INSTANCE = new AppSchemeHandler();
     private static final FastLogger LOGGER = new FastLogger();
 
     @SneakyThrows
     @Override
-    public @Nullable HttpResponse apply(@Nullable HttpSession request) {
-        String uri = request.getUri();
+    public SaucerSchemeResponse handle(SaucerSchemeRequest request) throws Throwable {
+        String uri = request.url();
 
         try {
             if (uri.startsWith("/$caffeinated-sdk-root$")) {
@@ -55,18 +54,12 @@ public class AppSchemeHandler implements Function<HttpSession, HttpResponse> {
                 mimeType = MimeTypes.getMimeForType(split[split.length - 1]);
             }
 
-            LOGGER.debug("200 %s -> app%s (%s)", request.getUri(), uri, mimeType);
+            LOGGER.debug("200 %s -> app%s (%s)", request.url(), uri, mimeType);
 
-            return HttpResponse.newFixedLengthResponse(StandardHttpStatus.OK, contents)
-                .setMimeType(mimeType);
+            return SaucerSchemeResponse.success(SaucerStash.of(contents), mimeType);
         } catch (Throwable t) {
-            LOGGER.severe("404 %s -> app%s\n%s", request.getUri(), uri, t);
-
-            return HttpResponse.newFixedLengthResponse(
-                StandardHttpStatus.INTERNAL_ERROR,
-                AppInterface.generateErrorHtml("500 Internal Error", t)
-            )
-                .setMimeType("text/html");
+            LOGGER.severe("404 %s -> app%s\n%s", request.url(), uri, t);
+            return SaucerSchemeResponse.error(SaucerRequestError.SAUCER_REQUEST_ERROR_NOT_FOUND);
         }
     }
 

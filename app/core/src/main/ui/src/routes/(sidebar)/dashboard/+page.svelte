@@ -9,11 +9,13 @@
 	})();
 
 	// @ts-ignore
-	const unregisterEventsListener = window.Bridge.on('koi-event', (e) => {
-		history.push(e);
-		history = history;
+	const unregisterEventsListener = window.saucer.messages.onMessage(({ type, data: event }) => {
+		if (type == 'koi-event') {
+			history.push(event);
+			history = history;
+		}
 	});
-	onDestroy(unregisterEventsListener);
+	onDestroy(() => window.saucer.messages.off(unregisterEventsListener));
 </script>
 
 {#each history as event}

@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { ANIMATE_DELAY, ANIMATE_DURATION, currentTheme } from '$lib/app';
+	import { ANIMATE_DELAY, ANIMATE_DURATION, currentTheme, svelte } from '$lib/app';
 	import type { Writable } from 'svelte/store';
 	import { fade } from 'svelte/transition';
 	import type { KoiAccount } from '../../app.js';
 
-	const accounts: Writable<KoiAccount[]> = window.App.koi.__stores.svelte('accounts');
+	const accounts: Writable<KoiAccount[]> = svelte('App.koi', 'accounts');
 
 	export let data;
 
