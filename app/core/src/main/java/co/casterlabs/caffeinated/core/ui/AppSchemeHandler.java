@@ -1,6 +1,5 @@
 package co.casterlabs.caffeinated.core.ui;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import co.casterlabs.caffeinated.core.App;
@@ -43,7 +42,8 @@ public class AppSchemeHandler implements SaucerSchemeHandler {
             byte[] contents;
             try (InputStream in = App.class.getResourceAsStream("/co/casterlabs/caffeinated/core/ui/html" + uri)) {
                 if (in == null) {
-                    throw new FileNotFoundException("Could not find UI file: /co/casterlabs/caffeinated/core/ui/html" + uri);
+                    LOGGER.severe("404 %s -> app%s", request.url(), uri);
+                    return SaucerSchemeResponse.error(SaucerRequestError.SAUCER_REQUEST_ERROR_NOT_FOUND);
                 }
                 contents = in.readAllBytes();
             }
@@ -58,8 +58,8 @@ public class AppSchemeHandler implements SaucerSchemeHandler {
 
             return SaucerSchemeResponse.success(SaucerStash.of(contents), mimeType);
         } catch (Throwable t) {
-            LOGGER.severe("404 %s -> app%s\n%s", request.url(), uri, t);
-            return SaucerSchemeResponse.error(SaucerRequestError.SAUCER_REQUEST_ERROR_NOT_FOUND);
+            LOGGER.severe("500 %s -> app%s\n%s", request.url(), uri, t);
+            return SaucerSchemeResponse.error(SaucerRequestError.SAUCER_REQUEST_ERROR_FAILED);
         }
     }
 
