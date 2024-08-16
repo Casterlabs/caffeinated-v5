@@ -3,10 +3,13 @@ package co.casterlabs.caffeinated.core.ui;
 import org.unbescape.uri.UriEscape;
 
 import co.casterlabs.caffeinated.core.App;
+import co.casterlabs.commons.io.streams.StreamUtil;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.saucer.Saucer;
+import co.casterlabs.saucer.utils.SaucerIcon;
 import co.casterlabs.saucer.utils.SaucerSize;
+import co.casterlabs.saucer.utils.SaucerStash;
 import lombok.AllArgsConstructor;
 import xyz.e3ndr.fastloggingframework.LogUtil;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
@@ -64,7 +67,8 @@ public class AppInterface {
             saucer.webview().setSchemeHandler(AppSchemeHandler.INSTANCE);
 
 //            webview.setDarkAppearance(useDarkAppearance);
-            saucer.window().setTitle("Casterlabs-Caffeinated");
+            setIcon(App.INSTANCE.preferences.ui.icon);
+            setTitle("Casterlabs-Caffeinated");
             saucer.window().show();
 
             LOGGER.info("Starting saucer...");
@@ -80,6 +84,17 @@ public class AppInterface {
     public static void setTitle(String title) {
         if (saucer != null) {
             saucer.window().setTitle(title);
+        }
+    }
+
+    public static void setIcon(String name) {
+        if (saucer != null) {
+            try {
+                byte[] bytes = StreamUtil.toBytes(App.class.getResourceAsStream("/co/casterlabs/caffeinated/core/ui/assets/logo/" + name + ".png"));
+                saucer.window().setIcon(SaucerIcon.of(SaucerStash.of(bytes)));
+            } catch (Throwable t) {
+                LOGGER.severe("Unable to load icon '%s':\n%s", name, t);
+            }
         }
     }
 

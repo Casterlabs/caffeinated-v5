@@ -17,8 +17,8 @@ public class Preferences {
     /* ------------------------ */
     public UIPreferences ui = new UIPreferences();
 
-    @JavascriptObject
     @JsonClass(exposeAll = true)
+    @JavascriptObject
     public static class UIPreferences {
         @JavascriptValue(watchForMutate = true)
         public String theme = "co.casterlabs.nqp_dark";
@@ -31,6 +31,10 @@ public class Preferences {
 
         @JavascriptValue
         public int height = 600;
+
+        @JavascriptValue
+        public String icon = "casterlabs";
+
     }
 
     /* ------------------------ */
