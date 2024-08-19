@@ -1,10 +1,10 @@
-package co.casterlabs.caffeinated.core.ui;
+package co.casterlabs.caffeinated.core.launcher;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.function.Supplier;
 
-import co.casterlabs.caffeinated.core.ui.AppInterface.DummySaucerRunnable;
+import co.casterlabs.caffeinated.core.launcher.AppInterface.DummySaucerRunnable;
 import co.casterlabs.commons.async.queue.ExecutionQueue;
 import co.casterlabs.saucer.Saucer;
 import lombok.Getter;

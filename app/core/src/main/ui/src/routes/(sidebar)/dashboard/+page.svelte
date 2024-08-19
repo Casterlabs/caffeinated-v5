@@ -3,10 +3,10 @@
 
 	let history: any[] = [];
 
-	(async () => {
-		const h = await window.App.koi.history;
-		history = h;
-	})();
+	// (async () => {
+	// 	const h = await window.App.koi.history;
+	// 	history = h;
+	// })();
 
 	// @ts-ignore
 	const unregisterEventsListener = window.saucer.messages.onMessage(({ type, data: event }) => {

@@ -1,16 +1,14 @@
-package co.casterlabs.caffeinated.core.ui;
+package co.casterlabs.caffeinated.core.launcher;
 
 import org.unbescape.uri.UriEscape;
 
 import co.casterlabs.caffeinated.core.App;
-import co.casterlabs.commons.io.streams.StreamUtil;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.saucer.Saucer;
-import co.casterlabs.saucer.utils.SaucerIcon;
 import co.casterlabs.saucer.utils.SaucerSize;
-import co.casterlabs.saucer.utils.SaucerStash;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import xyz.e3ndr.fastloggingframework.LogUtil;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
@@ -18,6 +16,7 @@ public class AppInterface {
     private static final FastLogger LOGGER = new FastLogger();
 
     private static Saucer saucer;
+    private static @Getter boolean isDev = false;
 
 //    private static boolean useDarkAppearance = true;
 
@@ -32,9 +31,7 @@ public class AppInterface {
         MainThread.getInstance().execute(() -> {
             saucer = Saucer.create();
 
-//            saucer.bridge().defineObject(null, LOGGER)
-
-            if (App.INSTANCE == null) {
+            if (App.appFailReason != null) {
                 // We are so borked at this point that we won't even attempt to setup the
                 // bridge.
                 saucer.webview().setUrl(AppInterface.generateErrorUrl("App failed to initialize:", App.appFailReason));
@@ -44,6 +41,7 @@ public class AppInterface {
                     if (System.getProperty("caffeinated.ui_override") == null) {
                         saucer.webview().serveScheme("/");
                     } else {
+                        isDev = true;
                         saucer.webview().setDevtoolsVisible(true);
                         saucer.webview().setUrl(System.getProperty("caffeinated.ui_override"));
                     }
@@ -58,18 +56,21 @@ public class AppInterface {
 
                     saucer.bridge().defineObject("App", App.INSTANCE);
                     saucer.bridge().apply();
+
+                    saucer.webview().setSchemeHandler(AppSchemeHandler.INSTANCE);
+
+//                    webview.setDarkAppearance(useDarkAppearance);
+                    setIcon(App.INSTANCE.preferences.ui.icon);
+                    setTitle("Casterlabs-Caffeinated");
                 } catch (Throwable t) {
-                    LOGGER.fatal("Unable to start UI server: %s", t);
-                    saucer.webview().setUrl(AppInterface.generateErrorUrl("Unable to start the UI server! Please report this to the Casterlabs developers:", t));
+                    LOGGER.fatal("Unable to start UI: %s", t);
+                    App.appFailReason = t;
+                    saucer.webview().setUrl(AppInterface.generateErrorUrl("Unable to start the UI! Please report this to the Casterlabs developers:", t));
                 }
             }
 
-            saucer.webview().setSchemeHandler(AppSchemeHandler.INSTANCE);
-
-//            webview.setDarkAppearance(useDarkAppearance);
-            setIcon(App.INSTANCE.preferences.ui.icon);
-            setTitle("Casterlabs-Caffeinated");
             saucer.window().show();
+            saucer.window().focus();
 
             LOGGER.info("Starting saucer...");
             MainThread.getInstance().execute(new DummySaucerRunnable(saucer)); // Take over.
@@ -88,14 +89,15 @@ public class AppInterface {
     }
 
     public static void setIcon(String name) {
-        if (saucer != null) {
-            try {
-                byte[] bytes = StreamUtil.toBytes(App.class.getResourceAsStream("/co/casterlabs/caffeinated/core/ui/assets/logo/" + name + ".png"));
-                saucer.window().setIcon(SaucerIcon.of(SaucerStash.of(bytes)));
-            } catch (Throwable t) {
-                LOGGER.severe("Unable to load icon '%s':\n%s", name, t);
-            }
-        }
+        // TODO broken upstream.
+//        if (saucer != null) {
+//            try {
+//                byte[] bytes = StreamUtil.toBytes(App.class.getResourceAsStream("/co/casterlabs/caffeinated/core/ui/assets/logo/" + name + ".png"));
+//                saucer.window().setIcon(SaucerIcon.of(SaucerStash.of(bytes)));
+//            } catch (Throwable t) {
+//                LOGGER.severe("Unable to load icon '%s':\n%s", name, t);
+//            }
+//        }
     }
 
     public static String generateErrorUrl(String title, Throwable reason) {

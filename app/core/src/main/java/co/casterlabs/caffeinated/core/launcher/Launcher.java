@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.core.ui;
+package co.casterlabs.caffeinated.core.launcher;
 
 import co.casterlabs.caffeinated.core.App;
 

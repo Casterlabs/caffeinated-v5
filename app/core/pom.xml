@@ -12,7 +12,7 @@
 	</parent>
 
 	<properties>
-		<saucer4j.version>51950d3</saucer4j.version>
+		<saucer4j.version>38532b8</saucer4j.version>
 	</properties>
 
 	<build>
@@ -200,6 +200,26 @@
 			<groupId>co.casterlabs.commons</groupId>
 			<artifactId>Async</artifactId>
 			<version>1.7.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.harawata</groupId>
+			<artifactId>appdirs</artifactId>
+			<version>1.2.1</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- Local DB -->
+		<dependency>
+			<groupId>co.casterlabs.Yen</groupId>
+			<artifactId>SQLBackedCache</artifactId>
+			<version>936493f</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.41.2.2</version>
 			<scope>compile</scope>
 		</dependency>
 

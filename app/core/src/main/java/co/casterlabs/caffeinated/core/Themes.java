@@ -1,4 +1,4 @@
-package co.casterlabs.caffeinated.core.ui;
+package co.casterlabs.caffeinated.core;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import co.casterlabs.caffeinated.core.App;
 import co.casterlabs.commons.io.streams.StreamUtil;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
