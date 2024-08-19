@@ -234,31 +234,19 @@ export declare type Preferences = SaucerIPCObject & {
 	readonly async save(): void
 };
 
-export declare type Theme = {
-	readonly name: string;
-	readonly wordmarkDataUri: string;
-	readonly isDark: boolean;
-	readonly baseScale: string[12];
-	readonly accentScale: string[12];
-	readonly baseScaleP3: null | string[12];
-	readonly accentScaleP3: null | string[12];
-};
-
 export declare type Themes = {
 	readonly map: {
 		[key: string]: Theme;
 	};
 };
 
-export declare type KoiAccount = {
-	readonly isAlive: boolean;
-	readonly token: String;
-	readonly profile: any; // TODO types for events...
-};
-
 export declare type Koi = SaucerIPCObject & {
 	readonly accounts: Promise<{ [key: string]: KoiAccount }> | { [key: string]: KoiAccount };
-	readonly history: Promise<any[]> | any[]; // TODO types for events...
+	readonly history: KoiHistory;
+};
+
+export declare type KoiHistory = SaucerIPCObject & {
+	getHistoryAtOrBeforeTimestamp: (beforeOrAt: number) => Promise<KoiHistoryEntry[]>// TODO types for events...
 };
 
 export declare type App = SaucerIPCObject & {
@@ -272,6 +260,28 @@ declare global {
 		App: App;
 		saucer: Saucer;
 	}
+
+	type KoiHistoryEntry = {
+		uuid: string;
+		event: any
+	}
+
+	declare type Theme = {
+		readonly name: string;
+		readonly wordmarkDataUri: string;
+		readonly isDark: boolean;
+		readonly baseScale: string[12];
+		readonly accentScale: string[12];
+		readonly baseScaleP3: null | string[12];
+		readonly accentScaleP3: null | string[12];
+	}
+
+	declare type KoiAccount = {
+		readonly isAlive: boolean;
+		readonly token: String;
+		readonly profile: any; // TODO types for events...
+	}
+
 }
 
 

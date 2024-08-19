@@ -5,12 +5,16 @@ import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 import co.casterlabs.caffeinated.core.App;
+import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.koi.api.types.KoiEvent;
+import co.casterlabs.koi.api.types.KoiEventType;
 import co.casterlabs.koi.api.types.events.ChannelPointsEvent;
 import co.casterlabs.koi.api.types.events.FollowEvent;
 import co.casterlabs.koi.api.types.events.LikeEvent;
@@ -21,8 +25,11 @@ import co.casterlabs.koi.api.types.events.SubscriptionEvent;
 import co.casterlabs.koi.api.types.events.ViewerJoinEvent;
 import co.casterlabs.koi.api.types.events.ViewerLeaveEvent;
 import co.casterlabs.rakurai.json.Rson;
+import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.element.JsonElement;
 import co.casterlabs.rakurai.json.element.JsonObject;
+import co.casterlabs.rakurai.json.serialization.JsonParseException;
+import co.casterlabs.saucer.bridge.JavascriptFunction;
 import co.casterlabs.saucer.bridge.JavascriptObject;
 import lombok.SneakyThrows;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
@@ -30,6 +37,7 @@ import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 @JavascriptObject
 public class KoiHistory {
     private static final FastLogger LOGGER = new FastLogger();
+    private static final int MAX_HISTORY_CHUNK = 250;
 
     public void init() throws SQLException {
         try {
@@ -40,6 +48,37 @@ public class KoiHistory {
             LOGGER.severe("Could not make historical data table:\n%s", x);
             throw x;
         }
+    }
+
+    @JavascriptFunction
+    public List<KoiHistoryEntry> getHistoryAtOrBeforeTimestamp(long beforeOrAt) {
+        List<Pair<String, byte[]>> history = new LinkedList<>();
+
+        try (PreparedStatement ps = App.INSTANCE.preferencesDatabase.prepareStatement("SELECT data, eventId FROM koi_historical WHERE timestamp <= ?1 ORDER BY rowid ASC LIMIT " + MAX_HISTORY_CHUNK + ";")) {
+            ps.setLong(1, beforeOrAt);
+            ps.execute();
+
+            ResultSet results = ps.getResultSet();
+            while (results.next()) {
+                history.add(new Pair<>(results.getString("eventId"), results.getBytes("data")));
+            }
+        } catch (Throwable t) {
+            LOGGER.severe("Could not add onto historical data:\n%s", t);
+        }
+
+        return history.parallelStream()
+            .map((entry) -> {
+                try {
+                    KoiEvent event = KoiEventType.get(Rson.DEFAULT.fromJson(decompress(entry.b()), JsonObject.class));
+                    return new KoiHistoryEntry(entry.a(), event);
+                } catch (JsonParseException e) {
+                    e.printStackTrace(); // Probably never thrown...
+                    return null;
+                }
+            })
+            .filter((entry) -> entry != null)
+            .sorted((entry1, entry2) -> Long.compare(entry1.event.timestamp.toEpochMilli(), entry2.event.timestamp.toEpochMilli()))
+            .collect(Collectors.toList());
     }
 
     public void storeEvent(KoiEvent event, JsonElement eventJson) {
@@ -155,6 +194,11 @@ public class KoiHistory {
 
         byte[] bytes = outputStream.toByteArray();
         return new String(bytes, StandardCharsets.UTF_8);
+    }
+
+    @JsonClass(exposeAll = true)
+    public static record KoiHistoryEntry(String uuid, KoiEvent event) {
+
     }
 
 }
